@@ -1,4 +1,4 @@
-package com.example.frontendtm;
+package com.example.soren5.myfirstapp;
 
 import org.junit.Test;
 
