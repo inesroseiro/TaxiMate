@@ -5,15 +5,16 @@
     android:layout_width="fill_parent"
     android:layout_height="128dip"
     android:padding="8dip">
-   <ImageView
-       android:id="@+id/foto_view"
-       android:layout_width="96dp"
-       android:layout_height="96dp"
-       android:layout_alignEnd="@id/imageView"
-       android:paddingEnd="8dp"
-       android:layout_alignTop="@id/imageView"
-       android:layout_alignBottom="@id/imageView"
-       />
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/foto_view"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_alignEnd="@id/imageView"
+        android:paddingEnd="8dp"
+        android:layout_alignTop="@id/imageView"
+        android:layout_alignBottom="@id/imageView"
+        android:layout_alignRight="@id/imageView"
+        android:paddingRight="8dp" />
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
         android:textSize="14sp"
         android:layout_alignStart="@id/imageView"
         android:layout_below="@id/de_text_view"
+        android:text="PARA: Grande moelas"
         />
     <TextView
         android:id="@+id/data_local_text_view"

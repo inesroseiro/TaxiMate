@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FacebookProfile" />
+        <activity android:name=".ListActivity" />
+        <activity android:name=".CreationActivity" />
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 

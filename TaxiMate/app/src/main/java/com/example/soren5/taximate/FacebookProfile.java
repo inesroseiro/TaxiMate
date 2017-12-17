@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FacebookProfile extends AppCompatActivity {
 
@@ -17,10 +19,16 @@ public class FacebookProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_profile);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         Intent intent = getIntent();
-        String userID = intent.getStringExtra("id");
+        final String userID = intent.getStringExtra("id");
         String nome = intent.getStringExtra("nome");
         String apelido = intent.getStringExtra("apelido");
+
+        DatabaseReference myRef = firebaseDatabase.getReference(userID);
+        myRef.child("nome").setValue(nome);
+        myRef.child("apelido").setValue(apelido);
+
 
         TextView nameView = (TextView) findViewById(R.id.nome_apelido);
 
@@ -33,9 +41,17 @@ public class FacebookProfile extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logout();
+                goToList(userID);
             }
         });
+    }
+
+    private void goToList(String id){
+        LoginManager.getInstance().logOut();
+        Intent toList = new Intent(FacebookProfile.this, ListActivity.class);
+        toList.putExtra("id", id);
+        startActivity(toList);
+        finish();
     }
 
     private void logout() {

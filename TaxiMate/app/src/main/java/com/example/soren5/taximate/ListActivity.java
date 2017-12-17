@@ -1,7 +1,9 @@
 package com.example.soren5.taximate;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,35 +11,61 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.ProfilePictureView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
-    int[] IMAGES = {R.drawable.catarina, R.drawable.cunha, R.drawable.ines, R.drawable.linhac, R.drawable.pedrocas, R.drawable.ze};
-    String[] NOME = {"Catarina", "Jose", "Ines", "Rui", "Pedro", "Jose"};
-    String[] DE = {"Polo 2", "Polo 1", "Moelas", "Escola de Hotelaria", "Palacio do Bairro", "Praca da Republica"};
-    String[] PARA = {"Casa do Povo", "Forum", "Alma Shopping", "Parque do urso", "Portugal dos pequenitos", "Shangai"};
-    String[] DATA_E_LOCAL = {"HOJE AS 21:00 - Coimbra","HOJE AS 12:23 - Coimbra","HOJE AS 10:04 - Coimbra","HOJE AS 21:07 - Coimbra","HOJE AS 22:03 - Coimbra","HOJE AS 21:34 - Shangai"};
     ListView listView;
     List list = new ArrayList<>();
     BaseAdapter adapter;
+    ArrayList<String> ID = new ArrayList<>();
+    ArrayList<String> NOME = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        listView = (ListView) findViewById(R.id.list_view);
-
-        adapter = new CustomAdapter();
-        listView.setAdapter(adapter);
+        Intent intent = getIntent();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        final String userID = intent.getStringExtra("id");
+        GraphRequest graphRequest = GraphRequest.newGraphPathRequest(accessToken, "me?fields=friends{first_name,last_name}", new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                JSONObject object = response.getJSONObject();
+                Log.d("myTag",object.toString() );
+                try {
+                    JSONArray friendArray = ((JSONObject)object.get("friends")).getJSONArray("data");
+                    for (int i = 0; i < friendArray.length(); i++){
+                        NOME.add(friendArray.getJSONObject(i).getString("first_name") + " " + friendArray.getJSONObject(i).getString("last_name"));
+                        ID.add(friendArray.getJSONObject(i).getString("id"));
+                    }
+                    listView = (ListView) findViewById(R.id.list_view);
+                    adapter = new CustomAdapter();
+                    listView.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        graphRequest.executeAsync();
     }
 
     class CustomAdapter extends BaseAdapter{
 
         @Override
         public int getCount() {
-            return IMAGES.length;
+            return ID.size();
         }
 
         @Override
@@ -53,17 +81,17 @@ public class ListActivity extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = getLayoutInflater().inflate(R.layout.pedido_layout, null);
-            ImageView imageView = (ImageView)view.findViewById(R.id.foto_view);
+            ProfilePictureView imageView = (ProfilePictureView) view.findViewById(R.id.foto_view);
             TextView nomeView = (TextView)view.findViewById(R.id.nome_text_view);
             TextView deView = (TextView)view.findViewById(R.id.de_text_view);
             TextView paraView = (TextView)view.findViewById(R.id.para_text_view);
             TextView dataLocalView = (TextView)view.findViewById(R.id.data_local_text_view);
 
-            imageView.setImageResource(IMAGES[i]);
-            nomeView.setText(NOME[i]);
-            deView.setText(DE[i]);
-            paraView.setText(PARA[i]);
-            dataLocalView.setText(DATA_E_LOCAL[i]);
+            imageView.setProfileId(ID.get(i));
+            nomeView.setText(NOME.get(i));
+            //deView.setText(DE[i]);
+            //paraView.setText(PARA[i]);
+            //dataLocalView.setText(DATA_E_LOCAL[i]);
             return view;
         }
     }

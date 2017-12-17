@@ -3,6 +3,7 @@ package com.example.soren5.taximate;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.soren5.taximate.FacebookProfile;
@@ -13,9 +14,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 AccessToken accessToken = loginResult.getAccessToken();
                 Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
+                GraphRequest graphRequest = GraphRequest.newGraphPathRequest(accessToken,
+                        "me?fields=friends{first_name,last_name}",
+                        new GraphRequest.Callback() {
+                            @Override
+                            public void onCompleted(GraphResponse response) {
+                                //Log.d("myTag", response.toString());
+                            }
+                        });
+                graphRequest.executeAsync();
+
                 get_profile(accessToken);
             }
 
@@ -52,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent
             data) {
@@ -60,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     private void get_profile(AccessToken accessToken){
+        Intent listIntent = new Intent(MainActivity.this, ListActivity.class);
+        startActivity(listIntent);
+        finish();
+        /*
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -90,6 +106,6 @@ public class MainActivity extends AppCompatActivity {
         parameters.putString("fields", "id, first_name, last_name");
         request.setParameters(parameters);
         request.executeAsync();
-
+        */
     }
 }
