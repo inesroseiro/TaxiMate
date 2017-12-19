@@ -48,7 +48,7 @@ public class FacebookProfile extends AppCompatActivity {
 
     private void goToList(String id){
         LoginManager.getInstance().logOut();
-        Intent toList = new Intent(FacebookProfile.this, ListActivity.class);
+        Intent toList = new Intent(FacebookProfile.this, MyRequestListActivity.class);
         toList.putExtra("id", id);
         startActivity(toList);
         finish();
@@ -56,7 +56,7 @@ public class FacebookProfile extends AppCompatActivity {
 
     private void logout() {
         LoginManager.getInstance().logOut();
-        Intent login = new Intent(FacebookProfile.this, MainActivity.class);
+        Intent login = new Intent(FacebookProfile.this, ImportantActivity.class);
         startActivity(login);
         finish();
     }

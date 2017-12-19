@@ -5,31 +5,25 @@ package com.example.soren5.taximate;
  */
 
 public class Pedido {
+    private String requestID;
+    private String userID;
     private String nome;
-    private String apelido;
-    private String de;
-    private String para;
 
-    public Pedido(String nome, String apelido, String de, String para, String dataLocal) {
-        this.nome = nome;
-        this.apelido = apelido;
-        this.de = de;
-        this.para = para;
-        this.dataLocal = dataLocal;
+    public String getNome() {
+        return nome;
     }
 
     public void setNome(String nome) {
-
         this.nome = nome;
     }
 
-    public String getApelido() {
-        return apelido;
-    }
 
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
-    }
+    private String de;
+    private String para;
+    private String cidade;
+    private String data;
+    private String hora;
+
 
     public String getDe() {
         return de;
@@ -47,27 +41,82 @@ public class Pedido {
         this.para = para;
     }
 
-    public String getDataLocal() {
-        return dataLocal;
+    public Pedido() {
     }
 
-    public void setDataLocal(String dataLocal) {
-        this.dataLocal = dataLocal;
+    public String getRequestID() {
+        return requestID;
     }
 
-    private String dataLocal;
-
-    public String getNome() {
-        return nome;
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
     }
 
-    public String getNome2() {
-        return apelido;
+    public String getUserID() {
+        return userID;
     }
 
-    public Pedido(String nome, String apelido) {
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public Pedido(String requestID, String userID, String de, String para, String cidade, String data, String hora) {
+
+        this.requestID = requestID;
+        this.userID = userID;
+        this.de = de;
+        this.para = para;
+        this.cidade = cidade;
+        this.data = data;
+        this.hora = hora;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "requestID='" + requestID + '\'' +
+                ", userID='" + userID + '\'' +
+                ", nome='" + nome + '\'' +
+                ", de='" + de + '\'' +
+                ", para='" + para + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", data='" + data + '\'' +
+                ", hora='" + hora + '\'' +
+                '}';
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public Pedido(String requestID, String userID, String nome, String de, String para, String cidade, String data, String hora) {
+        this.requestID = requestID;
+        this.userID = userID;
         this.nome = nome;
-        this.apelido = apelido;
+        this.de = de;
+        this.para = para;
+        this.cidade = cidade;
+        this.data = data;
+        this.hora = hora;
     }
-
 }

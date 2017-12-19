@@ -6,30 +6,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.soren5.taximate.FacebookProfile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class ImportantActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_important);
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -71,16 +67,34 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-    private void get_profile(AccessToken accessToken){
-        Intent listIntent = new Intent(MainActivity.this, ListActivity.class);
-        startActivity(listIntent);
-        finish();
+    private void get_profile(final AccessToken accessToken){
+        final Intent listIntent = new Intent(ImportantActivity.this, NewRequestActivity.class);
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        String userID = null;
+                        String name = null;
+                        Log.v("myTage", accessToken.toString());
+                        try {
+                            userID = object.getString("id");
+                            name = object.getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.v("myTag", name);
+                        listIntent.putExtra("id", userID);
+                        listIntent.putExtra("name", name);
+                        startActivity(listIntent);
+                        finish();
+                    }
+                });
+        request.executeAsync();
         /*
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Intent profileIntent = new Intent(MainActivity.this, FacebookProfile.class);
+                        Intent profileIntent = new Intent(ImportantActivity.this, FacebookProfile.class);
                         try {
                             String userID = object.getString("id");
                             profileIntent.putExtra("id", userID);
