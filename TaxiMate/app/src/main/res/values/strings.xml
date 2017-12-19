@@ -93,4 +93,12 @@
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">1722627041122786</string>
     <string name="fb_login_protocol_scheme">fb1722627041122786</string>
+    <string name="logout_button">logout_button</string>
+    <string name="textview">TextView</string>
+    <string name="feedpedidos">FeedPedidos</string>
+    <string name="fazerpedido">FazerPedido</string>
+    <string name="meuperfil">MeuPerfil</string>
+    <string name="logout">Logout</string>
+    <string name="botao_de_logout">BOTAO DE LOGOUT</string>
+
 </resources>

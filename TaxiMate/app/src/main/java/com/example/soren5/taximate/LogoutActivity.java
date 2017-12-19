@@ -1,71 +1,85 @@
 package com.example.soren5.taximate;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import android.widget.Toast;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-
+import com.facebook.login.LoginManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
-
-    private CallbackManager callbackManager;
+public class LogoutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_logout);
 
-        callbackManager = CallbackManager.Factory.create();
+        Button logout = (Button)findViewById(R.id.logout_button);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
 
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "user_birthday", "user_posts");
 
-        loginButton.registerCallback(callbackManager, new
-                FacebookCallback<LoginResult>() {
+
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.NavBot);
+        //BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        AccessToken accessToken = loginResult.getAccessToken();
-                        Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
-                        get_profile(accessToken);
-                    }
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.meu_perfil:
+                                Intent intent = new Intent(LogoutActivity.this, MeuPerfil.class);
+                                startActivity(intent);
+                                finish();
+                                break;
 
-                    @Override
-                    public void onCancel() {
-                    }
 
-                    @Override
-                    public void onError(FacebookException error) {
+                            case R.id.feed_pedidos:
+                                Intent intent2 = new Intent(LogoutActivity.this, ListActivity.class);
+                                startActivity(intent2);
+                                finish();
+                                break;
+                        }
+
+                        return false;
                     }
                 });
+
+
+    }
+
+    private void logout() {
+        LoginManager.getInstance().logOut();
+        Intent login = new Intent(LogoutActivity.this, MainActivity.class);
+        startActivity(login);
+        finish();
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent
-            data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
 
     private void get_profile(AccessToken accessToken){
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Intent profileIntent = new Intent(MainActivity.this, MeuPerfil.class);
+                        Intent profileIntent = new Intent(LogoutActivity.this, MeuPerfil.class);
                         try {
                             String userID = object.getString("id");
                             profileIntent.putExtra("id", userID);
@@ -101,4 +115,5 @@ public class MainActivity extends AppCompatActivity {
         request.executeAsync();
 
     }
+
 }

@@ -1,7 +1,14 @@
 package com.example.soren5.taximate;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,7 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity{
 
     int[] IMAGES = {R.drawable.catarina, R.drawable.cunha, R.drawable.ines, R.drawable.linhac, R.drawable.pedrocas, R.drawable.ze};
     String[] NOME = {"Catarina", "Jose", "Ines", "Rui", "Pedro", "Jose"};
@@ -22,15 +29,46 @@ public class ListActivity extends AppCompatActivity {
     ListView listView;
     List list = new ArrayList<>();
     BaseAdapter adapter;
+    protected BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
         listView = (ListView) findViewById(R.id.list_view);
 
         adapter = new CustomAdapter();
         listView.setAdapter(adapter);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.NavBot);
+        //BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        Log.v("myTag", bottomNavigationView.toString());
+
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.logout:
+                                Intent intent = new Intent(ListActivity.this, LogoutActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+
+                            case R.id.meu_perfil:
+                                Intent intent2 = new Intent(ListActivity.this, MeuPerfil.class);
+                                intent2.putExtra("id", getIntent().getStringExtra("id"));
+                                intent2.putExtra("name", getIntent().getStringExtra("name"));
+                                intent2.putExtra("lastname", getIntent().getStringExtra("lastname"));
+                                intent2.putExtra("birthday", getIntent().getStringExtra("birthday"));
+                                startActivity(intent2);
+                                finish();
+                                break;
+                        }
+                        return false;
+                    }
+                });
     }
 
     class CustomAdapter extends BaseAdapter{
@@ -50,6 +88,7 @@ public class ListActivity extends AppCompatActivity {
             return 0;
         }
 
+        @SuppressLint({"ViewHolder", "InflateParams"})
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = getLayoutInflater().inflate(R.layout.pedido_layout, null);
@@ -59,7 +98,7 @@ public class ListActivity extends AppCompatActivity {
             TextView paraView = (TextView)view.findViewById(R.id.para_text_view);
             TextView dataLocalView = (TextView)view.findViewById(R.id.data_local_text_view);
 
-            imageView.setImageResource(IMAGES[i]);
+            imageView.setImageResource(R.drawable.catarina);
             nomeView.setText(NOME[i]);
             deView.setText(DE[i]);
             paraView.setText(PARA[i]);
