@@ -7,7 +7,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.soren5.taximate.ImportantActivity"
+    tools:context="com.example.soren5.taximate.MainActivity"
     android:baselineAligned="false"
     android:background="@drawable/login"
     android:orientation="vertical">

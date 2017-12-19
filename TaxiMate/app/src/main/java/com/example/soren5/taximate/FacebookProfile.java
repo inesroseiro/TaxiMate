@@ -56,7 +56,7 @@ public class FacebookProfile extends AppCompatActivity {
 
     private void logout() {
         LoginManager.getInstance().logOut();
-        Intent login = new Intent(FacebookProfile.this, ImportantActivity.class);
+        Intent login = new Intent(FacebookProfile.this, MainActivity.class);
         startActivity(login);
         finish();
     }

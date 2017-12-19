@@ -18,7 +18,7 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ImportantActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
 
@@ -68,7 +68,7 @@ public class ImportantActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     private void get_profile(final AccessToken accessToken){
-        final Intent listIntent = new Intent(ImportantActivity.this, NewRequestActivity.class);
+        final Intent listIntent = new Intent(MainActivity.this, NewRequestActivity.class);
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -94,7 +94,7 @@ public class ImportantActivity extends AppCompatActivity {
                 accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Intent profileIntent = new Intent(ImportantActivity.this, FacebookProfile.class);
+                        Intent profileIntent = new Intent(MainActivity.this, FacebookProfile.class);
                         try {
                             String userID = object.getString("id");
                             profileIntent.putExtra("id", userID);
